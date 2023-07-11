@@ -1,0 +1,164 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 25.11.2015 15:25:09
+
+newmtl Material__38
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka D:\Games\Prince of Persia Забытые пески\2015.11.15_18.40.19\Frames\Frame0000\Tex_0150_0.dds
+	map_Kd D:\Games\Prince of Persia Забытые пески\2015.11.15_18.40.19\Frames\Frame0000\Tex_0150_0.dds
+
+newmtl Tex_0111_0_dds
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka D:\Games\Prince of Persia Забытые пески\2015.11.15_18.40.19\Frames\Frame0000\Tex_0111_0.dds
+	map_Kd D:\Games\Prince of Persia Забытые пески\2015.11.15_18.40.19\Frames\Frame0000\Tex_0111_0.dds
+
+newmtl Tex_0112_0_dds
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka D:\Games\Prince of Persia Забытые пески\2015.11.15_18.40.19\Frames\Frame0000\Tex_0112_0.dds
+	map_Kd D:\Games\Prince of Persia Забытые пески\2015.11.15_18.40.19\Frames\Frame0000\Tex_0112_0.dds
+
+newmtl Tex_0116_0_dds
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka D:\Games\Prince of Persia Забытые пески\2015.11.15_18.40.19\Frames\Frame0000\Tex_0116_0.dds
+	map_Kd D:\Games\Prince of Persia Забытые пески\2015.11.15_18.40.19\Frames\Frame0000\Tex_0116_0.dds
+
+newmtl Tex_0117_0_dds
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka D:\Games\Prince of Persia Забытые пески\2015.11.15_18.40.19\Frames\Frame0000\Tex_0117_0.dds
+	map_Kd D:\Games\Prince of Persia Забытые пески\2015.11.15_18.40.19\Frames\Frame0000\Tex_0117_0.dds
+
+newmtl Tex_0118_0_dds
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka D:\Games\Prince of Persia Забытые пески\2015.11.15_18.40.19\Frames\Frame0000\Tex_0118_0.dds
+	map_Kd D:\Games\Prince of Persia Забытые пески\2015.11.15_18.40.19\Frames\Frame0000\Tex_0118_0.dds
+
+newmtl Tex_0119_0_dds
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka D:\Games\Prince of Persia Забытые пески\2015.11.15_18.40.19\Frames\Frame0000\Tex_0119_0.dds
+	map_Kd D:\Games\Prince of Persia Забытые пески\2015.11.15_18.40.19\Frames\Frame0000\Tex_0119_0.dds
+
+newmtl Tex_0120_0_dds
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka D:\Games\Prince of Persia Забытые пески\2015.11.15_18.40.19\Frames\Frame0000\Tex_0120_0.dds
+	map_Kd D:\Games\Prince of Persia Забытые пески\2015.11.15_18.40.19\Frames\Frame0000\Tex_0120_0.dds
+
+newmtl Material__126
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Users\vados\Desktop\3D models\Prince of Persia The Forgotten Sands\Characters\Prince\p3dm.ru_0022_22.dds
+	map_Kd C:\Users\vados\Desktop\3D models\Prince of Persia The Forgotten Sands\Characters\Prince\p3dm.ru_0022_22.dds
+
+newmtl Material__129
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Users\vados\Desktop\3D models\Prince of Persia The Forgotten Sands\Characters\Prince\p3dm.ru_0019_19.dds
+	map_Kd C:\Users\vados\Desktop\3D models\Prince of Persia The Forgotten Sands\Characters\Prince\p3dm.ru_0019_19.dds
+
+newmtl Material__128
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+
+newmtl wire_134059008
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.525490 0.231373 0.031373
+	Kd 0.525490 0.231373 0.031373
+	Ks 0.350000 0.350000 0.350000

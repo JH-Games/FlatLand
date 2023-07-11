@@ -1,0 +1,68 @@
+newmtl Model001_Material001
+map_Kd skirt_d.png
+map_bump skirt_n.png
+
+newmtl Model001_Material002
+map_Kd skirt_d.png
+map_bump skirt_n.png
+
+newmtl Model001_Material003
+map_Kd eyes_d.png
+
+newmtl Model001_Material004
+map_Kd bags_d.png
+map_bump bags_n.png
+
+newmtl Model001_Material005
+map_Kd face_d.png
+
+newmtl Model001_Material006
+map_Kd boot_d.png
+map_bump boot_n.png
+
+newmtl Model001_Material007
+map_Kd face_d.png
+map_bump face_n.png
+
+newmtl Model001_Material008
+map_Kd hands_d.png
+map_bump hands_n.png
+
+newmtl Model001_Material009
+map_Kd bracelet_d.png
+map_bump bracelet_n.png
+
+newmtl Model001_Material010
+map_Kd belts_d.png
+map_bump belts_n.png
+
+newmtl Model001_Material011
+map_Kd skirt_d.png
+map_bump skirt_n.png
+
+newmtl Model001_Material012
+map_Kd gun_d.png
+
+newmtl Model001_Material013
+map_Kd shoulder_d.png
+map_bump shoulder_n.png
+
+newmtl Model001_Material014
+map_Kd belts_d.png
+map_bump belts_n.png
+
+newmtl Model001_Material015
+map_Kd mouth_diffuse.png
+map_bump mouth_bump.png
+
+newmtl Model001_Material016
+map_Kd body_d.png
+map_bump body_n.png
+
+newmtl Model001_Material017
+map_Kd skirt_d.png
+map_bump skirt_n.png
+
+newmtl Model001_Material018
+map_Kd eyelashes.png
+
