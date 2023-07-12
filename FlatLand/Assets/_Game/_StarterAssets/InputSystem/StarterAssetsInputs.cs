@@ -60,12 +60,11 @@ namespace StarterAssets {
 
         public void SprintInput(bool newSprintState) {
             sprint = newSprintState;
-            CameraController.OnCameraModeChanged?.Invoke(sprint ? CameraMode.Sprint : CameraMode.Normal);
+            sneak = false;
         }
         
         public void SneakInput(bool newSprintState) {
             sneak = newSprintState;
-            CameraController.OnCameraModeChanged?.Invoke(sneak ? CameraMode.Sneak : CameraMode.Normal);
         }
 
         private void OnApplicationFocus(bool hasFocus) {

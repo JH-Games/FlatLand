@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using _Game.Scripts;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -14,6 +15,7 @@ namespace StarterAssets {
     public class ThirdPersonController : MonoBehaviour {
         [Header("Player")]
         public float SneakSpeed = 1f;
+
         public float MoveSpeed = 4f;
         public float SprintSpeed = 6f;
         [Range(0.0f, 0.3f)] public float RotationSmoothTime = 0.12f;
@@ -81,14 +83,6 @@ namespace StarterAssets {
         private float _jumpTimeoutDelta;
         private float _fallTimeoutDelta;
 
-        // animation IDs
-        private readonly int _animIDSpeed = Animator.StringToHash("Speed");
-        private readonly int _animIDSneak = Animator.StringToHash("Sneak");
-        private readonly int _animIDGrounded = Animator.StringToHash("Grounded");
-        private readonly int _animIDJump = Animator.StringToHash("Jump");
-        private readonly int _animIDFreeFall = Animator.StringToHash("FreeFall");
-        private readonly int _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
-  
 #if ENABLE_INPUT_SYSTEM
         private PlayerInput _playerInput;
 #endif
@@ -121,7 +115,8 @@ namespace StarterAssets {
         private void Start() {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
 
-            _hasAnimator = TryGetComponent(out _animator);
+            // _hasAnimator = TryGetComponent(out _animator);
+            PlayerAnimation.Init(GetComponent<Animator>());
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
 #if ENABLE_INPUT_SYSTEM
@@ -135,8 +130,6 @@ namespace StarterAssets {
         }
 
         private void Update() {
-            _hasAnimator = TryGetComponent(out _animator);
-
             JumpAndGravity();
             GroundedCheck();
             Move();
@@ -144,33 +137,74 @@ namespace StarterAssets {
 
         private void LateUpdate() {
             CameraRotation();
+
+            void CameraRotation() {
+                if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition) {
+                    //Don't multiply mouse input by Time.deltaTime;
+                    float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+
+                    _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
+                    _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
+                }
+
+                _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
+                _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+
+                CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
+            }
+        }
+
+
+        private void JumpAndGravity() {
+            if (Grounded) {
+                _fallTimeoutDelta = FallTimeout;
+
+                PlayerAnimation.Jump = (false);
+                PlayerAnimation.FreeFall = (false);
+
+                if (_verticalVelocity < 0.0f) _verticalVelocity = -2f;
+
+                if (_input.jump && _jumpTimeoutDelta <= 0.0f) {
+                    var velocityNeededToReachHeight = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+                    _verticalVelocity = velocityNeededToReachHeight;
+
+                    PlayerAnimation.Jump = (true);
+                }
+
+                if (_jumpTimeoutDelta >= 0.0f) _jumpTimeoutDelta -= Time.deltaTime;
+            }
+            else {
+                _jumpTimeoutDelta = JumpTimeout;
+
+                if (_fallTimeoutDelta >= 0.0f) _fallTimeoutDelta -= Time.deltaTime;
+                else PlayerAnimation.FreeFall = (true);
+
+                _input.jump = false;
+            }
+
+            if (_verticalVelocity < _terminalVelocity) _verticalVelocity += Gravity * Time.deltaTime;
         }
 
         private void GroundedCheck() {
             Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
             Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
-
-            if (_hasAnimator) _animator.SetBool(_animIDGrounded, Grounded);
-        }
-
-        private void CameraRotation() {
-            if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition) {
-                //Don't multiply mouse input by Time.deltaTime;
-                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
-
-                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
-                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
-            }
-
-            _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
-            _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
-
-            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
+            PlayerAnimation.Grounded = Grounded;
         }
 
         private void Move() {
-            float targetSpeed = _input.sneak ? SneakSpeed : MoveSpeed;
-            targetSpeed = _input.sprint ? SprintSpeed : targetSpeed;
+            float targetSpeed;
+
+            if (_input.sprint) {
+                targetSpeed = SprintSpeed;
+                PlayerStates.SetState(PlayerState.Sprint);
+            }
+            else if (_input.sneak) {
+                targetSpeed = SneakSpeed;
+                PlayerStates.SetState(PlayerState.Sneak);
+            } else {
+                targetSpeed = MoveSpeed;
+                PlayerStates.SetState(PlayerState.Walk);
+            }
 
             if (_input.move == Vector2.zero) targetSpeed = 0.0f;
 
@@ -203,46 +237,8 @@ namespace StarterAssets {
 
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
-            if (_hasAnimator) {
-                _animator.SetFloat(_animIDSpeed, _animationBlend);
-                _animator.SetBool(_animIDSneak, _input.sneak);
-                
-                _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
-            }
-        }
-
-        private void JumpAndGravity() {
-            if (Grounded) {
-                _fallTimeoutDelta = FallTimeout;
-
-                if (_hasAnimator) {
-                    _animator.SetBool(_animIDJump, false);
-                    _animator.SetBool(_animIDFreeFall, false);
-                }
-
-                if (_verticalVelocity < 0.0f) _verticalVelocity = -2f;
-
-                if (_input.jump && _jumpTimeoutDelta <= 0.0f) {
-                    var velocityNeededToReachHeight = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-                    _verticalVelocity = velocityNeededToReachHeight;
-
-                    if (_hasAnimator) _animator.SetBool(_animIDJump, true);
-                }
-
-                if (_jumpTimeoutDelta >= 0.0f) _jumpTimeoutDelta -= Time.deltaTime;
-            }
-            else {
-                _jumpTimeoutDelta = JumpTimeout;
-
-                if (_fallTimeoutDelta >= 0.0f) _fallTimeoutDelta -= Time.deltaTime;
-                else {
-                    if (_hasAnimator) _animator.SetBool(_animIDFreeFall, true);
-                }
-
-                _input.jump = false;
-            }
-
-            if (_verticalVelocity < _terminalVelocity) _verticalVelocity += Gravity * Time.deltaTime;
+            PlayerAnimation.SetSpeed(_animationBlend);
+            PlayerAnimation.SetMotionSpeed(inputMagnitude);
         }
 
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax) {
