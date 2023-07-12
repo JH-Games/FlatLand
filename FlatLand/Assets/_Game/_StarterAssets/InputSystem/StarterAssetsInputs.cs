@@ -12,6 +12,9 @@ namespace StarterAssets {
         public bool jump;
         public bool sprint;
         public bool sneak;
+        public bool aim;
+        public bool unsheathed;
+
 
         [Header("Movement Settings")]
         public bool analogMovement;
@@ -23,49 +26,37 @@ namespace StarterAssets {
 
 #if ENABLE_INPUT_SYSTEM
         public void OnMove(InputValue value) {
-            MoveInput(value.Get<Vector2>());
+            move = value.Get<Vector2>();
         }
 
         public void OnLook(InputValue value) {
             if (cursorInputForLook) {
-                LookInput(value.Get<Vector2>());
+                look = value.Get<Vector2>();
             }
         }
 
         public void OnJump(InputValue value) {
-            JumpInput(value.isPressed);
+            jump = value.isPressed;
         }
 
         public void OnSprint(InputValue value) {
-            SprintInput(value.isPressed);
-        }
-        
-        public void OnSneak(InputValue value) {
-            SneakInput(value.isPressed);
-        }
-#endif
-
-
-        public void MoveInput(Vector2 newMoveDirection) {
-            move = newMoveDirection;
-        }
-
-        public void LookInput(Vector2 newLookDirection) {
-            look = newLookDirection;
-        }
-
-        public void JumpInput(bool newJumpState) {
-            jump = newJumpState;
-        }
-
-        public void SprintInput(bool newSprintState) {
-            sprint = newSprintState;
+            sprint = value.isPressed;
             sneak = false;
         }
-        
-        public void SneakInput(bool newSprintState) {
-            sneak = newSprintState;
+
+        public void OnSneak(InputValue value) {
+            sneak = value.isPressed;
         }
+
+        public void OnAim(InputValue value) {
+            aim = value.isPressed;
+        }
+
+        public void OnUnsheath(InputValue value) {
+            unsheathed = value.isPressed;
+        }
+
+#endif
 
         private void OnApplicationFocus(bool hasFocus) {
             SetCursorState(cursorLocked);

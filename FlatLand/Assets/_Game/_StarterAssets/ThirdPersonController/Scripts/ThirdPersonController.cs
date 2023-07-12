@@ -194,7 +194,12 @@ namespace StarterAssets {
         private void Move() {
             float targetSpeed;
 
-            if (_input.sprint) {
+            
+            if (_input.aim) {
+                targetSpeed = MoveSpeed;
+                PlayerStates.SetState(PlayerState.Aim);
+            }
+            else if (_input.sprint) {
                 targetSpeed = SprintSpeed;
                 PlayerStates.SetState(PlayerState.Sprint);
             }
@@ -205,6 +210,8 @@ namespace StarterAssets {
                 targetSpeed = MoveSpeed;
                 PlayerStates.SetState(PlayerState.Walk);
             }
+            PlayerAnimation.Unsheathed = (_input.unsheathed);
+
 
             if (_input.move == Vector2.zero) targetSpeed = 0.0f;
 
@@ -230,7 +237,7 @@ namespace StarterAssets {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
 
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                if (!_input.aim) transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
 
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
@@ -238,6 +245,7 @@ namespace StarterAssets {
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
             PlayerAnimation.SetSpeed(_animationBlend);
+            PlayerAnimation.SetDirection(_input.move);
             PlayerAnimation.SetMotionSpeed(inputMagnitude);
         }
 

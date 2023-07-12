@@ -8,6 +8,7 @@ namespace _Game.Scripts {
         Walk,
         Sprint,
         Sneak,
+        Aim,
     }
 
     public static class PlayerStates {
