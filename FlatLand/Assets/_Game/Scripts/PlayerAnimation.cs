@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace _Game.Scripts {
+namespace Player.Animation {
     public static class PlayerAnimation {
         private static Animator _animator;
         private static readonly int _speed = Animator.StringToHash("Speed");
@@ -17,37 +17,20 @@ namespace _Game.Scripts {
         private static readonly int _aimMoveSideways = Animator.StringToHash("Aim_Move_Sideways");
         private static readonly int _aimMoveForward = Animator.StringToHash("Aim_Move_Forward");
 
+
+        public static void SetFreeFall(bool value) => _animator.SetBool(_IsFreeFall, value);
+        public static void SetGrounded(bool value) => _animator.SetBool(_isGrounded, value);
+        public static void SetJump(bool value) => _animator.SetBool(_isJump, value);
+        public static void SetUnsheathed(bool value) => _animator.SetBool(_isUnsheathed, value);
+        public static void SetAim(bool value) => _animator.SetBool(_isAim, value);
+        public static void SetSneak(bool value) => _animator.SetBool(_isSneak, value);
         
-           
-        public static bool FreeFall {
-            set => _animator.SetBool(_IsFreeFall, value);
-        }
-
-        public static bool Grounded {
-            set => _animator.SetBool(_isGrounded, value);
-        }
-
-        public static bool Jump {
-            set => _animator.SetBool(_isJump, value);
-        }
-
-        public static bool Unsheathed {
-            get => _animator.GetBool(_isUnsheathed);
-            set => _animator.SetBool(_isUnsheathed, value);
-        }
 
 
         public static void Init(Animator animator) {
             _animator = animator;
-            PlayerStates.OnPlayerStateChanged += HandlePlayerStateChanged;
         }
-        
-       
 
-        private static void HandlePlayerStateChanged(PlayerState newState) {
-            _animator.SetBool(_isSneak, newState == PlayerState.Sneak);
-            _animator.SetBool(_isAim, newState == PlayerState.Aim);
-        }
 
         public static void SetSpeed(float speed) => _animator.SetFloat(_speed, speed);
         public static void SetMotionSpeed(float speed) => _animator.SetFloat(_motionSpeed, speed);
@@ -55,12 +38,5 @@ namespace _Game.Scripts {
             _animator.SetFloat(_aimMoveSideways, inputMove.x);
             _animator.SetFloat(_aimMoveForward, inputMove.y);
         }
-
-        public static void Dispose() {
-            PlayerStates.OnPlayerStateChanged -= HandlePlayerStateChanged;
-        }
-
-
-       
     }
 }

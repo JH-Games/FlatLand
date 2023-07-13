@@ -1,20 +1,25 @@
-using _Game.Scripts;
 using Cinemachine;
 using OknaaEXTENSIONS.CustomWrappers;
+using Player.StateMachines.MoveStates;
+using Player.StateMachines.WeaponStates;
+using StateMachines.Base;
 using UnityEngine;
 
 public class CameraController : Singleton<CameraController> {
     [SerializeField] private CinemachineVirtualCamera normalCamera;
     [SerializeField] private CinemachineVirtualCamera sprintCamera;
     [SerializeField] private CinemachineVirtualCamera sneakCamera;
+    [SerializeField] private CinemachineVirtualCamera aimCamera;
+    
 
-    private void Start() => PlayerStates.OnPlayerStateChanged += HandleCameraModeChanged;
+    private void Start() => PlayerStateMachine.OnStateChanged += HandleCameraModeChanged;
 
-    private void HandleCameraModeChanged(PlayerState playerState) {
-        normalCamera.Priority = playerState is PlayerState.Idle or PlayerState.Walk ? 1 : 0;
-        sprintCamera.Priority = playerState is PlayerState.Sprint ? 1 : 0;
-        sneakCamera.Priority = playerState is PlayerState.Sneak ? 1 : 0;
+    private void HandleCameraModeChanged(State currentState) {
+        normalCamera.Priority = currentState is IdleState or WalkState ? 1 : 0;
+        sprintCamera.Priority = currentState is ParkourState ? 1 : 0;
+        sneakCamera.Priority = currentState is SneakState ? 1 : 0;
+        aimCamera.Priority = currentState is AimState ? 1 : 0;
     }
 
-    protected override void Dispose() => PlayerStates.OnPlayerStateChanged -= HandleCameraModeChanged;
+    protected override void Dispose() => PlayerStateMachine.OnStateChanged -= HandleCameraModeChanged;
 }
