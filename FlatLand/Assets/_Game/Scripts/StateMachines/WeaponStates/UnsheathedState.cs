@@ -1,12 +1,14 @@
 
+using UnityEngine;
+
 namespace Player.StateMachines.WeaponStates {
-    public class SheathedState : WeaponState {
+    public class UnsheathedState : WeaponState {
 
         public override void Enter() {
-
+            
         }
 
-        public override void Tick(float deltaTime) {
+        public override void Tick(Transform transform, float deltaTime) {
         }
 
         public override void Exit() {
