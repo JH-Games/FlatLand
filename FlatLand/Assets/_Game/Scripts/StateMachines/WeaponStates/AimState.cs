@@ -18,8 +18,8 @@ namespace Player.StateMachines.WeaponStates {
             
             BlendSpeedOverTime();
 
-            Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
-            TargetRotation = _input.look.x * RotationSmoothTime;
+            Vector3 inputDirection = new Vector3(Input.move.x, 0.0f, Input.move.y).normalized;
+            TargetRotation = Input.look.x * RotationSmoothTime;
             
             // TargetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + Camera.transform.eulerAngles.y;
 
@@ -34,7 +34,7 @@ namespace Player.StateMachines.WeaponStates {
             void BlendSpeedOverTime() {
                 float currentHorizontalSpeed = new Vector3(CharacterController.velocity.x, 0.0f, CharacterController.velocity.z).magnitude;
                 float speedOffset = 0.1f;
-                float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+                float inputMagnitude = Input.analogMovement ? Input.move.magnitude : 1f;
                 PlayerAnimation.SetMotionSpeed(inputMagnitude);
 
                 var targetSpeedReached = currentHorizontalSpeed < TargetSpeed - speedOffset || currentHorizontalSpeed > TargetSpeed + speedOffset;
@@ -47,7 +47,7 @@ namespace Player.StateMachines.WeaponStates {
                 AnimationBlend = Mathf.Lerp(AnimationBlend, TargetSpeed, Time.deltaTime * SpeedChangeRate);
                 if (AnimationBlend < 0.01f) AnimationBlend = 0f;
                 // PlayerAnimation.SetSpeed(AnimationBlend);
-                PlayerAnimation.SetDirection(_input.move);
+                PlayerAnimation.SetDirection(Input.move);
 
             }
         }

@@ -12,16 +12,25 @@ namespace Systems {
         [SerializeField] private CinemachineVirtualCamera sneakCamera;
         [SerializeField] private CinemachineVirtualCamera aimCamera;
 
+        private bool _isInitialized;
 
-        private void Start() => PlayerStateMachine.OnMoveStateChanged += HandleCameraModeChanged;
+        public void Init() {
+            if (_isInitialized) return;
+            PlayerStateMachine.OnMoveStateChanged += HandleCameraModeChanged;
+            _isInitialized = true;
+        }
 
         private void HandleCameraModeChanged(State currentState) {
-            normalCamera.Priority = currentState is IdleState or WalkState ? 1 : 0;
+            normalCamera.Priority = currentState is NormalState ? 1 : 0;
             sprintCamera.Priority = currentState is ParkourState ? 1 : 0;
             sneakCamera.Priority = currentState is SneakState ? 1 : 0;
             aimCamera.Priority = currentState is AimState ? 1 : 0;
         }
 
-        protected override void Dispose() => PlayerStateMachine.OnMoveStateChanged -= HandleCameraModeChanged;
+        public override void Dispose() {
+            if (!_isInitialized) return;
+            PlayerStateMachine.OnMoveStateChanged -= HandleCameraModeChanged;
+            _isInitialized = false;
+        }
     }
 }

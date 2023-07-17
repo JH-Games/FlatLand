@@ -7,8 +7,8 @@ namespace Player.StateMachines.MoveStates {
 
         public override void Enter() {
             PlayerAnimation.SetSneak(true);
-            ThirdPersonController.Instance.SetTargetSpeed(PlayerStateMachine.Instance.playerData.SneakSpeed);
-            Speed = PlayerStateMachine.Instance.playerData.SneakSpeed;
+            // ThirdPersonController.Instance.SetTargetSpeed(PlayerStateMachine.Instance.playerData.SneakSpeed);
+            // Speed = PlayerStateMachine.Instance.playerData.SneakSpeed;
 
         }
 

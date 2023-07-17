@@ -3,9 +3,10 @@ using Player.Animation;
 using Player.StateMachines.Base;
 using Player.StateMachines.MoveStates;
 using Player.StateMachines.WeaponStates;
-using StarterAssetsStuff;
+using Systems;
 using UnityEngine;
-using InputSystem = Systems.InputSystem;
+using Systems.Input;
+using InputSystem = Systems.Input.InputSystem;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -19,11 +20,6 @@ namespace Player {
     [RequireComponent(typeof(PlayerInput))]
 #endif
     public class ThirdPersonController : Singleton<ThirdPersonController> {
-        [Header("Player")]
-        public float SneakSpeed = 1f;
-
-        public float MoveSpeed = 4f;
-        public float SprintSpeed = 6f;
         [Range(0.0f, 0.3f)] public float RotationSmoothTime = 0.12f;
         public float SpeedChangeRate = 10.0f;
         public AudioClip LandingAudioClip;
@@ -39,10 +35,9 @@ namespace Player {
 
         [Space(10)]
         [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
-        public float JumpTimeout = 0.50f;
-
-        [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
-        public float FallTimeout = 0.15f;
+        private static float JumpTimeout = 0.50f;
+        [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")] 
+        private static float FallTimeout = 0.15f;
 
         [Header("Player Grounded")]
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
@@ -74,78 +69,60 @@ namespace Player {
         public bool LockCameraPosition = false;
 
 
-        public StarterAssetsInputs Input => _input;
-        public CharacterController CharacterController => _characterController;
-        public float VerticalVelocity => _verticalVelocity;
-        public float Speed {
+        public static CharacterController CharacterController => _characterController;
+        public static float VerticalVelocity => _verticalVelocity;
+        public static float Speed {
             get => _speed;
             set => _speed = value;
         }
-        public float RotationVelocity {
+        public static float RotationVelocity {
             get => _rotationVelocity;
             set => _rotationVelocity = value;
         }
-        public float TargetRotation {
+        public static float TargetRotation {
             get => _targetRotation;
             set => _targetRotation = value;
         } 
-        public float TargetSpeed {
+        public static float TargetSpeed {
             get => _targetSpeed;
             set => _targetSpeed = value;
         }    
-        public float AnimationBlend {
+        public static float AnimationBlend {
             get => _animationBlend;
             set => _animationBlend = value;
         }
         
+        public Animator Animator => GetComponent<Animator>();
 
 
         // cinemachine
-        private float _cinemachineTargetYaw;
+        private static float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
 
         // player
-        private float _speed;
-        private float _targetSpeed;
-        private float _animationBlend;
-        private float _targetRotation = 0.0f;
-        private float _rotationVelocity;
-        private float _verticalVelocity;
-        private float _terminalVelocity = 53.0f;
+        private static float _speed;
+        private static float _targetSpeed;
+        private static float _animationBlend;
+        private static float _targetRotation = 0.0f;
+        private static float _rotationVelocity;
+        private static float _verticalVelocity;
+        private static float _terminalVelocity = 53.0f;
 
         // timeout deltatimed
-        private float _jumpTimeoutDelta;
-        private float _fallTimeoutDelta;
+        private static float _jumpTimeoutDelta;
+        private static float _fallTimeoutDelta;
 
-
-        private PlayerInput _playerInput;
-        private Animator _animator;
-        private CharacterController _characterController;
-        private StarterAssetsInputs _input;
-        private GameObject _mainCamera;
+        private static PlayerInput _playerInput;
+        private static CharacterController _characterController;
 
         private const float _threshold = 0.01f;
 
-        private bool _hasAnimator;
-
-        private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
-
-
-        private void Awake() {
-            if (_mainCamera == null) {
-                _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-            }
-        }
-
-        private void Start() {
+        public void Init() {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
 
-            PlayerAnimation.Init(GetComponent<Animator>());
             _characterController = GetComponent<CharacterController>();
-            _input = GetComponent<StarterAssetsInputs>();
             _playerInput = GetComponent<PlayerInput>();
 
-            InputSystem.Init(this, _input);
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
         }
@@ -160,14 +137,12 @@ namespace Player {
 
             void CameraRotation() {
                 // make the player rotate with the _input.look when aiming
-
-
-                if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition) {
+                if (InputSystem.Instance.look.sqrMagnitude >= _threshold && !LockCameraPosition) {
                     //Don't multiply mouse input by Time.deltaTime;
-                    float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+                    float deltaTimeMultiplier = _playerInput.currentControlScheme == "KeyboardMouse" ? 1.0f : Time.deltaTime;
 
-                    _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
-                    _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
+                    _cinemachineTargetYaw += InputSystem.Instance.look.x * deltaTimeMultiplier;
+                    _cinemachineTargetPitch += InputSystem.Instance.look.y * deltaTimeMultiplier;
                 }
 
                 _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
@@ -187,7 +162,7 @@ namespace Player {
 
                 if (_verticalVelocity < 0.0f) _verticalVelocity = -2f;
 
-                if (_input.jump && _jumpTimeoutDelta <= 0.0f) {
+                if (InputSystem.Instance.jump && _jumpTimeoutDelta <= 0.0f) {
                     var velocityNeededToReachHeight = Mathf.Sqrt(JumpHeight * -2f * Gravity);
                     _verticalVelocity = velocityNeededToReachHeight;
 
@@ -202,7 +177,7 @@ namespace Player {
                 if (_fallTimeoutDelta >= 0.0f) _fallTimeoutDelta -= Time.deltaTime;
                 else PlayerAnimation.SetFreeFall((true));
 
-                _input.jump = false;
+                InputSystem.Instance.jump = false;
             }
 
             if (_verticalVelocity < _terminalVelocity) _verticalVelocity += Gravity * Time.deltaTime;
@@ -235,23 +210,23 @@ namespace Player {
             //
             // _characterController.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, Speed, 0.0f) * Time.deltaTime);
 
-            void BlendSpeedOverTime() {
-                float currentHorizontalSpeed = new Vector3(_characterController.velocity.x, 0.0f, _characterController.velocity.z).magnitude;
-                float speedOffset = 0.1f;
-                float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
-                PlayerAnimation.SetMotionSpeed(inputMagnitude);
-
-                var targetSpeedReached = currentHorizontalSpeed < _targetSpeed - speedOffset || currentHorizontalSpeed > _targetSpeed + speedOffset;
-                if (targetSpeedReached) _speed = _targetSpeed;
-                else {
-                    _speed = Mathf.Lerp(currentHorizontalSpeed, _targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
-                    _speed = Mathf.Round(_speed * 1000f) / 1000f;
-                }
-
-                _animationBlend = Mathf.Lerp(_animationBlend, _targetSpeed, Time.deltaTime * SpeedChangeRate);
-                if (_animationBlend < 0.01f) _animationBlend = 0f;
-                PlayerAnimation.SetSpeed(_animationBlend);
-            }
+            // void BlendSpeedOverTime() {
+            //     float currentHorizontalSpeed = new Vector3(_characterController.velocity.x, 0.0f, _characterController.velocity.z).magnitude;
+            //     float speedOffset = 0.1f;
+            //     float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+            //     PlayerAnimation.SetMotionSpeed(inputMagnitude);
+            //
+            //     var targetSpeedReached = currentHorizontalSpeed < _targetSpeed - speedOffset || currentHorizontalSpeed > _targetSpeed + speedOffset;
+            //     if (targetSpeedReached) _speed = _targetSpeed;
+            //     else {
+            //         _speed = Mathf.Lerp(currentHorizontalSpeed, _targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
+            //         _speed = Mathf.Round(_speed * 1000f) / 1000f;
+            //     }
+            //
+            //     _animationBlend = Mathf.Lerp(_animationBlend, _targetSpeed, Time.deltaTime * SpeedChangeRate);
+            //     if (_animationBlend < 0.01f) _animationBlend = 0f;
+            //     PlayerAnimation.SetSpeed(_animationBlend);
+            // }
         }
 
         public void SetTargetSpeed(float speed) => _targetSpeed = speed;

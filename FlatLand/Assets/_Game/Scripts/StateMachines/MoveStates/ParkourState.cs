@@ -8,8 +8,8 @@ namespace Player.StateMachines.MoveStates {
 
         public override void Enter() {
 
-            ThirdPersonController.Instance.SetTargetSpeed(PlayerStateMachine.Instance.playerData.RunSpeed);
-            Speed = PlayerStateMachine.Instance.playerData.RunSpeed;
+            // ThirdPersonController.Instance.SetTargetSpeed(PlayerStateMachine.Instance.playerData.RunSpeed);
+            // Speed = PlayerStateMachine.Instance.playerData.RunSpeed;
 
         }
 

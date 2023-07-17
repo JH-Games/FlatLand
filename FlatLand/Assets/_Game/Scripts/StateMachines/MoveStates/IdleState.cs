@@ -8,7 +8,7 @@ namespace Player.StateMachines.MoveStates {
 
         public override void Enter() {
 
-            ThirdPersonController.Instance.SetTargetSpeed(0);
+            // ThirdPersonController.Instance.SetTargetSpeed(0);
             Speed = 0;
             Print("---> MoveState : IdleState ___ Enter");
 

@@ -3,14 +3,14 @@ using Player.StateMachines.Base;
 using UnityEngine;
 
 namespace Player.StateMachines.MoveStates {
-    public class WalkState : MoveState {
+    public class NormalState : MoveState {
         
-        public WalkState() : base() {
+        public NormalState() : base() {
         }
 
         public override void Enter() {
-            ThirdPersonController.Instance.SetTargetSpeed(PlayerStateMachine.Instance.playerData.WalkSpeed);
-            Speed = PlayerStateMachine.Instance.playerData.WalkSpeed;
+            // ThirdPersonController.Instance.SetTargetSpeed(PlayerStateMachine.Instance.playerData.WalkSpeed);
+            // Speed = PlayerStateMachine.Instance.playerData.WalkSpeed;
             Print("---> MoveState : WalkState ___ Enter");
         }
 

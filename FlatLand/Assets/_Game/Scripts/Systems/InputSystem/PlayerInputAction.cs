@@ -15,6 +15,8 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
+namespace Systems.Input {
+    
 public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
 {
     public InputActionAsset asset { get; }
@@ -534,4 +536,5 @@ public partial class @PlayerInputAction : IInputActionCollection2, IDisposable
         void OnAim(InputAction.CallbackContext context);
         void OnUnsheath(InputAction.CallbackContext context);
     }
+}
 }
