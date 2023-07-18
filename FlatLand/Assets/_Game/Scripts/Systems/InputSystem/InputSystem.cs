@@ -17,6 +17,7 @@ namespace Systems.Input {
 
         [Header("Character Input Values")]
         public Vector2 move;
+
         public Vector2 look;
         public bool jump;
         private bool _IsMoving => move != Vector2.zero;
@@ -26,13 +27,14 @@ namespace Systems.Input {
 
         [Header("Mouse Cursor Settings")]
         public bool cursorLocked = true;
+
         public bool cursorInputForLook = true;
 
         private static bool _isInit;
-        
+
         public void Init() {
             if (_isInit) return;
-            
+
             PlayerInputAction = new PlayerInputAction();
             var playerMap = PlayerInputAction.Player;
 
@@ -108,8 +110,8 @@ namespace Systems.Input {
                     PlayerStateMachine.SwitchMoveState(new NormalState());
                     break;
             }
-            PlayerStateMachine.Instance.UpdateSpeed(move);
 
+            PlayerStateMachine.Instance.UpdateSpeed(move);
         }
 
         public void OnSneak(InputAction.CallbackContext context) {
@@ -123,8 +125,8 @@ namespace Systems.Input {
                     PlayerStateMachine.SwitchMoveState(new NormalState());
                     break;
             }
-            PlayerStateMachine.Instance.UpdateSpeed(move);
 
+            PlayerStateMachine.Instance.UpdateSpeed(move);
         }
 
         public void OnAim(InputAction.CallbackContext context) {
@@ -141,7 +143,13 @@ namespace Systems.Input {
         }
 
         public void OnUnsheath(InputAction.CallbackContext context) {
-            throw new System.NotImplementedException();
+            if (!GameStateSystem.IsPlaying) return;
+            
+            PlayerStateMachine.SwitchWeaponState(
+                PlayerStateMachine.CurrentWeaponState is SheathedState
+                    ? new UnsheathedState()
+                    : new SheathedState()
+                );
         }
 
         public override void Dispose() {

@@ -8,10 +8,12 @@ namespace Player.StateMachines.Base {
     public class PlayerStateMachine : Singleton<PlayerStateMachine> {
         public static Action<State> OnMoveStateChanged;
         public PlayerData playerData;
-        
+
         public float Speed { get; private set; }
 
-        public MoveState CurrentMoveState => _currentMoveState;
+        public static MoveState CurrentMoveState => _currentMoveState;
+        public static WeaponState CurrentWeaponState => _currentWeaponState;
+
         private static MoveState _currentMoveState;
         private static WeaponState _currentWeaponState;
 
@@ -33,7 +35,7 @@ namespace Player.StateMachines.Base {
             _currentMoveState?.Enter();
             OnMoveStateChanged?.Invoke(state);
         }
-        
+
         public static void SwitchWeaponState(WeaponState state) {
             if (_currentWeaponState == state) return;
             _currentWeaponState?.Exit();
@@ -47,12 +49,14 @@ namespace Player.StateMachines.Base {
                 Speed = 0;
                 return;
             }
-            
+
             if (_currentMoveState is ParkourState) {
                 Speed = playerData.RunSpeed;
-            } else if (_currentMoveState is SneakState) {
+            }
+            else if (_currentMoveState is SneakState) {
                 Speed = playerData.SneakSpeed;
-            } else if (_currentMoveState is NormalState) {
+            }
+            else if (_currentMoveState is NormalState) {
                 Speed = playerData.WalkSpeed;
             }
         }

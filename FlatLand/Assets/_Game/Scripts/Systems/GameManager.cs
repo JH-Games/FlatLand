@@ -1,3 +1,4 @@
+using _Game.Scripts;
 using OknaaEXTENSIONS.CustomWrappers;
 using Player;
 using Player.Animation;
@@ -17,6 +18,7 @@ namespace Systems {
             ThirdPersonController.Instance.Init();
             PlayerAnimation.Init(ThirdPersonController.Instance.Animator);
             PlayerStateMachine.Init();
+            WeaponSystem.Instance.Init();
         }
         
         

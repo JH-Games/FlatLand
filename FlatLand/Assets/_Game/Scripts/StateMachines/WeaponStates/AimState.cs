@@ -7,6 +7,7 @@ namespace Player.StateMachines.WeaponStates {
         private float _rotationVelocity;
 
         public override void Enter() {
+            Print("AimState Enter");
             PlayerAnimation.SetAim(true);
             ThirdPersonController.Instance.SetTargetSpeed(PlayerStateMachine.Instance.playerData.AimSpeed);
         }
