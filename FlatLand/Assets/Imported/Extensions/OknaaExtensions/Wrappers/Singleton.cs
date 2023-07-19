@@ -6,8 +6,6 @@ namespace OknaaEXTENSIONS.CustomWrappers {
         public static T Instance => _instance ??= FindObjectOfType<T>();
         private static T _instance;
 
-        private bool _isInitialized;
-
 
         public virtual void Dispose() { }
 

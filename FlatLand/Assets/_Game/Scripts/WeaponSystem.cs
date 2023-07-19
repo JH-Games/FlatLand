@@ -7,11 +7,9 @@ namespace _Game.Scripts {
         public GameObject HandWeapon;
 
 
-
         public void Init() {
             UnEquip();
         }
-        
         
         public void Equip() {
             BackWeapon.SetActive(false);
@@ -22,10 +20,5 @@ namespace _Game.Scripts {
             BackWeapon.SetActive(true);
             HandWeapon.SetActive(false);
         }
-        
-        
-        
-        
-        
     }
 }

@@ -1,23 +1,32 @@
 using System;
 using OknaaEXTENSIONS.CustomWrappers;
+using Player.Animation;
 using Player.StateMachines.MoveStates;
 using Player.StateMachines.WeaponStates;
+using Systems;
 using UnityEngine;
 
 namespace Player.StateMachines.Base {
     public class PlayerStateMachine : Singleton<PlayerStateMachine> {
         public static Action<State> OnMoveStateChanged;
+        public GameObject CameraTarget;
         public PlayerData playerData;
 
         public float Speed { get; private set; }
-
         public static MoveState CurrentMoveState => _currentMoveState;
-        public static WeaponState CurrentWeaponState => _currentWeaponState;
-
         private static MoveState _currentMoveState;
-        private static WeaponState _currentWeaponState;
 
-        public static void Init() {
+        public static WeaponState CurrentWeaponState => _currentWeaponState;
+        private static WeaponState _currentWeaponState;
+        
+        public static CharacterController CharacterController => _characterController;
+        private static CharacterController _characterController;
+        
+
+        public void Init() {
+            PlayerAnimation.Init(GetComponent<Animator>());
+            _characterController = GetComponent<CharacterController>();
+
             SwitchMoveState(new NormalState());
             SwitchWeaponState(new SheathedState());
         }
@@ -44,7 +53,6 @@ namespace Player.StateMachines.Base {
         }
 
         public void UpdateSpeed(Vector2 move) {
-            print("move: " + move);
             if (move == Vector2.zero) {
                 Speed = 0;
                 return;
@@ -60,5 +68,9 @@ namespace Player.StateMachines.Base {
                 Speed = playerData.WalkSpeed;
             }
         }
+        
+        
+        private void OnFootstep(AnimationEvent animationEvent) => SoundSystem.Instance.PlayFootStep(animationEvent, transform.TransformPoint(_characterController.center));
+        private void OnLand(AnimationEvent animationEvent) => SoundSystem.Instance.PlayLand(animationEvent, transform.TransformPoint(_characterController.center));
     }
 }

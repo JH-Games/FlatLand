@@ -1,9 +1,7 @@
-using System;
 using OknaaEXTENSIONS.CustomWrappers;
 using Player.StateMachines.Base;
 using Player.StateMachines.MoveStates;
 using Player.StateMachines.WeaponStates;
-using Systems.Input;
 using UnityEngine;
 using static Systems.Input.PlayerInputAction;
 #if ENABLE_INPUT_SYSTEM
@@ -14,13 +12,11 @@ namespace Systems.Input {
     public class InputSystem : Singleton<InputSystem>, IPlayerActions {
         private static PlayerInputAction PlayerInputAction;
 
-
         [Header("Character Input Values")]
         public Vector2 move;
-
         public Vector2 look;
         public bool jump;
-        private bool _IsMoving => move != Vector2.zero;
+        public bool IsMoving => move != Vector2.zero;
 
         [Header("Movement Settings")]
         public bool analogMovement;
@@ -130,26 +126,26 @@ namespace Systems.Input {
         }
 
         public void OnAim(InputAction.CallbackContext context) {
-            if (!GameStateSystem.IsPlaying) return;
-
-            switch (context) {
-                case { phase: InputActionPhase.Started }:
-                    PlayerStateMachine.SwitchWeaponState(new AimState());
-                    break;
-                case { phase: InputActionPhase.Canceled }:
-                    PlayerStateMachine.SwitchWeaponState(new UnsheathedState());
-                    break;
-            }
+            // if (!GameStateSystem.IsPlaying) return;
+            //
+            // switch (context) {
+            //     case { phase: InputActionPhase.Started }:
+            //         PlayerStateMachine.SwitchWeaponState(new AimState());
+            //         break;
+            //     case { phase: InputActionPhase.Canceled }:
+            //         PlayerStateMachine.SwitchWeaponState(new UnsheathedState());
+            //         break;
+            // }
         }
 
         public void OnUnsheath(InputAction.CallbackContext context) {
-            if (!GameStateSystem.IsPlaying) return;
-            
-            PlayerStateMachine.SwitchWeaponState(
-                PlayerStateMachine.CurrentWeaponState is SheathedState
-                    ? new UnsheathedState()
-                    : new SheathedState()
-                );
+            // if (!GameStateSystem.IsPlaying) return;
+            //
+            // PlayerStateMachine.SwitchWeaponState(
+            //     PlayerStateMachine.CurrentWeaponState is SheathedState
+            //         ? new UnsheathedState()
+            //         : new SheathedState()
+            //     );
         }
 
         public override void Dispose() {

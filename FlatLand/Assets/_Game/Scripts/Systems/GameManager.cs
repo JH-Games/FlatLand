@@ -12,13 +12,12 @@ namespace Systems {
         private void Awake() => Init();
 
         private static void Init() {
-            CameraController.Instance.Init();
             InputSystem.Instance.Init();
+            PlayerStateMachine.Instance.Init();
             State.Init(InputSystem.Instance);
-            ThirdPersonController.Instance.Init();
-            PlayerAnimation.Init(ThirdPersonController.Instance.Animator);
-            PlayerStateMachine.Init();
             WeaponSystem.Instance.Init();
+            CameraController.Instance.Init();
+
         }
         
         

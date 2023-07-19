@@ -1,18 +1,21 @@
+using Player.StateMachines.MoveStates;
 using Systems.Input;
 using UnityEngine;
 
 namespace Player.StateMachines.Base {
     public abstract class State {
         protected static InputSystem Input;
-        public static void Init(InputSystem input) => Input = input;
-
-
+        public static void Init(InputSystem input) {
+            Input = input;
+            MoveState.Init();
+        }
+       
         public abstract void Enter();
         public abstract void Tick(Transform transform_, float deltaTime);
         public abstract void Exit();
 
         protected void Print(string message) {
-            Debug.Log(message);
+            // Debug.Log(message);
         }
     }
 }

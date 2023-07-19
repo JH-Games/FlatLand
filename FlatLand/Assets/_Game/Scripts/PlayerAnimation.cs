@@ -1,3 +1,4 @@
+using Player.StateMachines.Base;
 using UnityEngine;
 
 namespace Player.Animation {
@@ -27,9 +28,7 @@ namespace Player.Animation {
         
 
 
-        public static void Init(Animator animator) {
-            _animator = animator;
-        }
+        public static void Init(Animator animator) => _animator = animator;
 
 
         public static void SetSpeed(float speed) => _animator.SetFloat(_speed, speed);
